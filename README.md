@@ -12,10 +12,11 @@ that is no longer required, not just unsubscribe the event subscriptions (otherw
 With the release of Angular 6.0, breaking changes were introduced in the form of the updated dependency on RxJS 6 so consult
 the following chart for what version of the package to use based on your version of Angular.
 
-| Angular Version | Package Version |
-|:---------------:|:---------------:|
-| \>= 6.0         | 2.*             |
-| < 6.0           | 1.*             |
+| Angular Version    | Package Version |
+|:------------------:|:---------------:|
+| \>= 7.0            | 3.*             |
+| \>= 6.0  && <7.0.0 | 2.*             |
+| < 6.0              | 1.*             |
 
 # Documentation
 
@@ -25,3 +26,4 @@ Documentation for the module is available on github pages at [https://chancezeus
 
 - [ChanceZeus](https://github.com/chancezeus): Initial author of the package
 - [Wizofgoz](https://github.com/Wizofgoz): Angular 6+ support
+- [manniniandrea](https://github.com/manniniandrea): Angular 7+ support

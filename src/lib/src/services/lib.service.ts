@@ -1,7 +1,7 @@
 import {Inject, Injectable, InjectionToken, NgZone} from '@angular/core';
 import {Observable, of, ReplaySubject, Subject, throwError} from 'rxjs';
 import {distinctUntilChanged, map, shareReplay, startWith} from 'rxjs/operators';
-import Echo from 'laravel-echo';
+import {Echo} from '../../laravel-echo';
 import * as io from 'socket.io-client';
 
 /**
@@ -340,7 +340,7 @@ export class EchoService {
       }, options);
     }
 
-    this._echo = new Echo(options);
+    this._echo = {options: options} as Echo.EchoStatic;
 
     this.options = this.echo.connector.options;
 
@@ -351,7 +351,7 @@ export class EchoService {
         this.connectionState$ = of<NullConnectionEvent>({type: 'connected'});
         break;
       case 'socket.io':
-        this.connectionState$ = new Observable<SocketIoConnectionEvents>(subscriber => {
+        this.connectionState$ = new Observable<SocketIoConnectionEvents>((subscriber: any) => {
           const socket = (<Echo.SocketIoConnector>this._echo.connector).socket;
 
           const handleConnect = () => this.ngZone.run(
@@ -432,7 +432,7 @@ export class EchoService {
         }).pipe(shareReplay(1));
         break;
       case 'pusher':
-        this.connectionState$ = new Observable<PusherConnectionEvents>(subscriber => {
+        this.connectionState$ = new Observable<PusherConnectionEvents>((subscriber: any) => {
           const socket = (<Echo.PusherConnector>this._echo.connector).pusher.connection;
 
           const handleStateChange = ({current}: { current: PusherStates }) => this.ngZone.run(
@@ -517,7 +517,7 @@ export class EchoService {
    * @returns The channel if found or null
    */
   private getChannelFromArray(name: string, type: ChannelType | null = null): Channel | null {
-    const channel = this.channels.find(channel => channel.name === name);
+    const channel = this.channels.find(c => c.name === name);
     if (channel) {
       if (type && channel.type !== type) {
         throw new Error(`Channel ${name} is not a ${type} channel`);
@@ -629,7 +629,7 @@ export class EchoService {
         if (channel) {
           channel.users = channel.users || [];
 
-          const existing = channel.users.find(existing => existing == user);
+          const existing = channel.users.find(e => e === user);
           if (existing) {
             const index = channel.users.indexOf(existing);
 
@@ -684,7 +684,7 @@ export class EchoService {
   login(headers: { [key: string]: string }, userId: string | number): EchoService {
     const newChannelName = `${this.config.userModel.replace('\\', '.')}.${userId}`;
 
-    if (this.userChannelName && this.userChannelName != newChannelName) {
+    if (this.userChannelName && this.userChannelName !== newChannelName) {
       this.logout();
     }
 
@@ -699,7 +699,7 @@ export class EchoService {
       }
     }
 
-    if (this.userChannelName != newChannelName) {
+    if (this.userChannelName !== newChannelName) {
       this.userChannelName = newChannelName;
 
       this.privateChannel(newChannelName).notification((notification: any) => {
@@ -797,7 +797,7 @@ export class EchoService {
     if (!channel.listeners[event]) {
       const listener = new Subject<any>();
 
-      channel.channel.listen(event, (event: any) => this.ngZone.run(() => listener.next(event)));
+      channel.channel.listen(event, (e: any) => this.ngZone.run(() => listener.next(e)));
 
       channel.listeners[event] = listener;
     }
@@ -821,7 +821,7 @@ export class EchoService {
     if (!channel.listeners[`_whisper_${event}_`]) {
       const listener = new Subject<any>();
 
-      channel.channel.listenForWhisper(event, (event: any) => this.ngZone.run(() => listener.next(event)));
+      channel.channel.listenForWhisper(event, (e: any) => this.ngZone.run(() => listener.next(e)));
 
       channel.listeners[`_whisper_${event}_`] = listener;
     }

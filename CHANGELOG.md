@@ -1,6 +1,13 @@
 # Change Log
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+<a name="2.1.0"></a>
+# [3.0.0](https://github.com/chancezeus/angular-laravel-echo/compare/v2.1.0...v3.0.0) (2019-04-19)
+
+
+### Features
+
+* Angular 7 Support
 
 <a name="2.1.0"></a>
 # [2.1.0](https://github.com/chancezeus/angular-laravel-echo/compare/v2.0.11...v2.1.0) (2019-01-24)
